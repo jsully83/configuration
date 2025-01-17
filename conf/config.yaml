@@ -1,0 +1,8 @@
+
+settings:
+  project: 'my_project'
+  group: 'training'
+  name: 'new_feature'
+  test: 'my_test'
+  tags: 'machine_learning'
+
