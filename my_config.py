@@ -1,7 +1,8 @@
 from datetime import datetime
 from pathlib import Path
 
-from configuration.Configuration import *
+from simple_config import Logger, Configuration
+# from configuration import Logger
 
 conf_path = Path.cwd().joinpath('conf/config.yaml')
 
@@ -16,4 +17,4 @@ logger = Logger.get_logger()
 
 cfg.now = datetime.now()
 
-logger.info(f'The time is now {cfg.now.strftime('%Y-%m-%d @ %H:%M:%S')}')
+logger.info(f"The time is now {cfg.now.strftime('%Y-%m-%d @ %H:%M:%S')}")
