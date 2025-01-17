@@ -4,7 +4,7 @@ from pathlib import Path
 import yaml
 from loguru import logger
 from munch import Munch
-from tqdm import tqdm
+# from tqdm import tqdm
 
 class Configuration():
     """
@@ -44,8 +44,8 @@ class Configuration():
         # store config as a Munch
         cls._cfg = Munch.fromDict(cfg_yaml)
         cls._cfg.now = datetime.now()
-        # logger.info(f'Loaded configuration from {config_file}.')
-        print(f'Loaded configuration from {config_file}. \nConfiguration.now timestamped at {cls._cfg.now.strftime('%Y-%m-%d_%H:%M:%S')}.')
+        logger.info(f'Loaded configuration from {config_file}. \nConfiguration.now timestamped at {cls._cfg.now.strftime('%Y-%m-%d_%H:%M:%S')}.')
+        # print(f'Loaded configuration from {config_file}. \nConfiguration.now timestamped at {cls._cfg.now.strftime('%Y-%m-%d_%H:%M:%S')}.')
         
     @classmethod
     def get_config(cls, config_path=None):
@@ -56,8 +56,8 @@ class Configuration():
 
     @classmethod
     def print_config(cls):
-        # logger.info(f'{yaml.dump(cls._cfg)}')
-        print(f'{yaml.dump(cls._cfg)}')
+        logger.info(f'{yaml.dump(cls._cfg)}')
+        # print(f'{yaml.dump(cls._cfg)}')
 
     @classmethod
     def validate_config(cls):
@@ -103,26 +103,26 @@ class Logger():
         log_dir = Path.cwd().joinpath(cfg.logger.path) # logs/
         log_dir.mkdir(parents=True, exist_ok=True)
         
-        log_group = log_dir.joinpath(cfg.wandb.group, cfg.now.strftime('%Y-%m-%d'))
+        log_group = log_dir.joinpath(cfg.settings.group, cfg.now.strftime('%Y-%m-%d'))
         log_group.mkdir(parents=True, exist_ok=True) #logs/group/day
         
-        log_testdir = log_group.joinpath(cfg.wandb.name)
+        log_testdir = log_group.joinpath(cfg.settings.name)
         cfg.logger.log_testpath = log_testdir
         
-        if cfg.wandb.group == 'dev':
-            log_file = log_testdir.joinpath(f"{cfg.wandb.name}.log")
+        if cfg.settings.group == 'dev':
+            log_file = log_testdir.joinpath(f"{cfg.settings.name}.log")
         else:
-            log_file = log_testdir.joinpath(f"{cfg.wandb.name}_{cfg.now.strftime('%Y-%m-%d_%H:%M:%S')}.log")
+            log_file = log_testdir.joinpath(f"{cfg.settings.name}_{cfg.now.strftime('%Y-%m-%d_%H:%M:%S')}.log")
         
         cls._logger_instance = logger
         cls._logger_instance.add(log_file, format="{time} {level} {message}",rotation="50 MB", )
         cls._logger_instance.info(f'Added log handler for {log_file}')
         cls._logger_instance.info(f'Logging started at {cfg.now.strftime('%Y-%m-%d @ %H:%M:%S')}')
         
-    @classmethod
-    def configure_tqdm(cls):
-        cls._logger_instance.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
-        cls._logger_instance.info("Initializing logger with tqdm...")
+    # @classmethod
+    # def configure_tqdm(cls):
+    #     cls._logger_instance.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
+    #     cls._logger_instance.info("Initializing logger with tqdm...")
 
     @classmethod
     def get_logger(cls):

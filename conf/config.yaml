@@ -6,3 +6,5 @@ settings:
   test: 'my_test'
   tags: 'machine_learning'
 
+logger:
+  path: 'logs'
